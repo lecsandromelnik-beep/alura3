@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Profissional</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --cor-primaria: #2c3e50;
+            --cor-secundaria: #3498db;
+            --cor-destaque: #e74c3c;
+            --cor-sucesso: #27ae60;
+            --cor-aviso: #f39c12;
+            --cor-fundo: #ecf0f1;
+            --cor-texto: #2c3e50;
+            --cor-texto-claro: #ffffff;
+            --cor-borda: #bdc3c7;
+            --fonte-principal: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --fonte-titulo: 'Arial', sans-serif;
+            --tamanho-fonte-base: 14px;
+            --tamanho-fonte-titulo: 24px;
+            --tamanho-fonte-subtitulo: 18px;
+        }
+
+        body {
+            font-family: var(--fonte-principal);
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto);
+            line-height: 1.6;
+        }
+
+        /* ==================== MENU LATERAL ==================== */
+        .menu-lateral {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--cor-primaria) 0%, #34495e 100%);
+            padding: 20px;
+            overflow-y: auto;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo-texto {
+            font-size: var(--tamanho-fonte-titulo);
+            font-weight: bold;
+            color: var(--cor-texto-claro);
+            font-family: var(--fonte-titulo);
+        }
+
+        .menu-item {
+            padding: 12px 15px;
+            margin: 8px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--cor-texto-claro);
+            display: flex;
+            align-items: center;
+            font-size: var(--tamanho-fonte-base);
+            text-decoration: none;
+        }
+
+        .menu-item:hover {
+            background-color: var(--cor-secundaria);
+            padding-left: 20px;
+            transform: translateX(5px);
+        }
+
+        .menu-item.ativo {
+            background-color: var(--cor-secundaria);
+            border-left: 4px solid var(--cor-destaque);
+        }
+
+        .menu-item i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        /* ==================== TOPO DA PÁGINA ==================== */
+        .topo {
+            position: fixed;
+            top: 0;
+            left: 250px;
+            right: 0;
+            height: 70px;
+            background-color: var(--cor-texto-claro);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            z-index: 999;
+        }
+
+        .titulo-pagina {
+            font-size: var(--tamanho-fonte-subtitulo);
+            font-weight: bold;
+            color: var(--cor-primaria);
+            font-family: var(--fonte-titulo);
+        }
+
+        .topo-direita {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .usuario-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--cor-secundaria), var(--cor-destaque));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--cor-texto-claro);
+            font-weight: bold;
+        }
+
+        .nome-usuario {
+            font-size: var(--tamanho-fonte-base);
+            color: var(--cor-texto);
+        }
+
+        /* ==================== CONTEÚDO PRINCIPAL ==================== */
+        .container {
+            margin-left: 250px;
+            margin-top: 70px;
+            padding: 30px;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background-color: var(--cor-texto-claro);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--cor-secundaria);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .card.sucesso {
+            border-left-color: var(--cor-sucesso);
+        }
+
+        .card.aviso {
+            border-left-color: var(--cor-aviso);
+        }
+
+        .card.destaque {
+            border-left-color: var(--cor-destaque);
+        }
+
+        .card-titulo {
+            font-size: var(--tamanho-fonte-subtitulo);
+            font-weight: bold;
+            color: var(--cor-primaria);
+            margin-bottom: 10px;
+            font-family: var(--fonte-titulo);
+        }
+
+        .card-valor {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--cor-secundaria);
+            margin-bottom: 5px;
+        }
+
+        .card-descricao {
+            font-size: 12px;
+            color: var(--cor-borda);
+        }
+
+        /* ==================== SEÇÕES ==================== */
+        .secao {
+            background-color: var(--cor-texto-claro);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .secao-titulo {
+            font-size: var(--tamanho-fonte-subtitulo);
+            font-weight: bold;
+            color: var(--cor-primaria);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--cor-fundo);
+            font-family: var(--fonte-titulo);
+        }
+
+        /* ==================== OPÇÕES DE LINKS ==================== */
+        .opcoes-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .link-opcao {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            border-radius: 6px;
+            text-decoration: none;
+            color: var(--cor-texto-claro);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: var(--tamanho-fonte-base);
+        }
+
+        .link-opcao.primario {
+            background: linear-gradient(135deg, var(--cor-secundaria), #2980b9);
+        }
+
+        .link-opcao.sucesso {
+            background: linear-gradient(135deg, var(--cor-sucesso), #229954);
+        }
+
+        .link-opcao.aviso {
+            background: linear-gradient(135deg, var(--cor-aviso), #d68910);
+        }
+
+        .link-opcao.destaque {
+            background: linear-gradient(135deg, var(--cor-destaque), #c0392b);
+        }
+
+        .link-opcao:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .link-opcao:active {
+            transform: scale(0.98);
+        }
+
+        /* ==================== TABELA ==================== */
+        .tabela-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: var(--tamanho-fonte-base);
+        }
+
+        thead {
+            background-color: var(--cor-fundo);
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+            color: var(--cor-primaria);
+            border-bottom: 2px solid var(--cor-borda);
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--cor-fundo);
+        }
+
+        tr:hover {
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .badge.ativo {
+            background-color: rgba(39, 174, 96, 0.2);
+            color: var(--cor-sucesso);
+        }
+
+        .badge.inativo {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: var(--cor-destaque);
+        }
+
+        /* ==================== FOOTER ==================== */
+        .footer {
+            background-color: var(--cor-primaria);
+            color: var(--cor-texto-claro);
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            border-top: 3px solid var(--cor-secundaria);
+        }
+
+        /* ==================== RESPONSIVIDADE ==================== */
+        @media (max-width: 768px) {
+            .menu-lateral {
+                width: 200px;
+            }
+
+            .topo {
+                left: 200px;
+            }
+
+            .container {
+                margin-left: 200px;
+                padding: 15px;
+            }
+
+            .dashboard {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+
+            .titulo-pagina {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .menu-lateral {
+                width: 0;
+                transition: width 0.3s ease;
+            }
+
+            .menu-lateral.ativo {
+                width: 200px;
+            }
+
+            .topo {
+                left: 0;
+            }
+
+            .container {
+                margin-left: 0;
+                padding: 15px;
+            }
+
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .opcoes-links {
+                grid-template-columns: 1fr;
+            }
+
+            .botao-menu-mobile {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ==================== MENU LATERAL ==================== -->
+    <nav class="menu-lateral" id="menuLateral">
+        <div class="logo">
+            <div class="logo-texto">📊 Dashboard</div>
+        </div>
+
+        <a href="#" class="menu-item ativo" onclick="carregarSecao('dashboard')">
+            <span>🏠</span>
+            <span>Inicio</span>
+        </a>
+        <a href="#" class="menu-item" onclick="carregarSecao('perfil')">
+            <span>👤</span>
+            <span>Meu Perfil</span>
+        </a>
+        <a href="#" class="menu-item" onclick="carregarSecao('projetos')">
+            <span>📁</span>
+            <span>Projetos</span>
+        </a>
+        <a href="#" class="menu-item" onclick="carregarSecao('relatorios')">
+            <span>📈</span>
+            <span>Relatórios</span>
+        </a>
+        <a href="#" class="menu-item" onclick="carregarSecao('configuracoes')">
+            <span>⚙️</span>
+            <span>Configurações</span>
+        </a>
+        <a href="#" class="menu-item" onclick="carregarSecao('ajuda')">
+            <span>❓</span>
+            <span>Ajuda</span>
+        </a>
+    </nav>
+
+    <!-- ==================== TOPO DA PÁGINA ==================== -->
+    <header class="topo">
+        <div class="titulo-pagina" id="tituloPagina">Dashboard Principal</div>
+        <div class="topo-direita">
+            <div class="usuario-info">
+                <div class="avatar">LM</div>
+                <div class="nome-usuario">Lecsandro Melnik</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== CONTEÚDO PRINCIPAL ==================== -->
+    <main class="container">
+        <!-- Dashboard Cards -->
+        <section class="dashboard" id="dashboardCards">
+            <div class="card">
+                <div class="card-titulo">Visitantes</div>
+                <div class="card-valor">2.547</div>
+                <div class="card-descricao">+12% em relação ao mês anterior</div>
+            </div>
+            <div class="card sucesso">
+                <div class="card-titulo">Projetos Concluídos</div>
+                <div class="card-valor">18</div>
+                <div class="card-descricao">Todos entregues no prazo</div>
+            </div>
+            <div class="card aviso">
+                <div class="card-titulo">Tarefas Pendentes</div>
+                <div class="card-valor">5</div>
+                <div class="card-descricao">Atenção necessária</div>
+            </div>
+            <div class="card destaque">
+                <div class="card-titulo">Receita</div>
+                <div class="card-valor">R$ 8.540</div>
+                <div class="card-descricao">Mês em andamento</div>
+            </div>
+        </section>
+
+        <!-- Seção de Opções de Links -->
+        <section class="secao">
+            <div class="secao-titulo">🔗 Opções de Links Rápidos</div>
+            <div class="opcoes-links">
+                <button class="link-opcao primario" onclick="abrirLink('https://github.com')">
+                    GitHub
+                </button>
+                <button class="link-opcao sucesso" onclick="abrirLink('https://stackoverflow.com')">
+                    Stack Overflow
+                </button>
+                <button class="link-opcao aviso" onclick="abrirLink('https://www.alura.com.br')">
+                    Alura
+                </button>
+                <button class="link-opcao destaque" onclick="abrirLink('https://developer.mozilla.org')">
+                    MDN Web
+                </button>
+                <button class="link-opcao primario" onclick="abrirLink('https://www.w3schools.com')">
+                    W3Schools
+                </button>
+                <button class="link-opcao sucesso" onclick="abrirLink('https://caniuse.com')">
+                    Can I Use
+                </button>
+            </div>
+        </section>
+
+        <!-- Seção de Tabela -->
+        <section class="secao">
+            <div class="secao-titulo">📋 Últimos Projetos</div>
+            <div class="tabela-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome do Projeto</th>
+                            <th>Data de Início</th>
+                            <th>Data de Término</th>
+                            <th>Progresso</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Página Web Portfolio</td>
+                            <td>01/06/2026</td>
+                            <td>15/06/2026</td>
+                            <td>100%</td>
+                            <td><span class="badge ativo">Concluído</span></td>
+                        </tr>
+                        <tr>
+                            <td>Dashboard Admin</td>
+                            <td>10/06/2026</td>
+                            <td>30/06/2026</td>
+                            <td>85%</td>
+                            <td><span class="badge ativo">Em Progresso</span></td>
+                        </tr>
+                        <tr>
+                            <td>API RESTful</td>
+                            <td>15/06/2026</td>
+                            <td>25/07/2026</td>
+                            <td>50%</td>
+                            <td><span class="badge ativo">Em Progresso</span></td>
+                        </tr>
+                        <tr>
+                            <td>Mobile App Design</td>
+                            <td>20/06/2026</td>
+                            <td>10/07/2026</td>
+                            <td>30%</td>
+                            <td><span class="badge ativo">Em Progresso</span></td>
+                        </tr>
+                        <tr>
+                            <td>Documentação Técnica</td>
+                            <td>01/07/2026</td>
+                            <td>15/07/2026</td>
+                            <td>0%</td>
+                            <td><span class="badge inativo">Planejado</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Seção de Informações -->
+        <section class="secao">
+            <div class="secao-titulo">ℹ️ Informações Gerais</div>
+            <p>
+                Bem-vindo ao seu dashboard profissional! Este painel foi criado com HTML5 e JavaScript puro,
+                apresentando um design moderno e responsivo. O sistema inclui:
+            </p>
+            <ul style="margin-top: 15px; margin-left: 20px; line-height: 2;">
+                <li>✅ Menu lateral interativo com navegação fluida</li>
+                <li>✅ Dashboard com cards de métricas em tempo real</li>
+                <li>✅ Opções de links rápidos para recursos externos</li>
+                <li>✅ Tabela de projetos com status detalhado</li>
+                <li>✅ Design totalmente responsivo para móvel e desktop</li>
+                <li>✅ Paleta de cores profissional e consistente</li>
+                <li>✅ Tipografia adequada e legível</li>
+                <li>✅ Animações suaves e transições elegantes</li>
+            </ul>
+        </section>
+    </main>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer">
+        <p>&copy; 2026 Dashboard Profissional - Criado por Lecsandro Melnik | Todos os direitos reservados</p>
+    </footer>
+
+    <!-- ==================== JAVASCRIPT ==================== -->
+    <script>
+        // ==================== VARIÁVEIS GLOBAIS ====================
+        const menuItens = document.querySelectorAll('.menu-item');
+        const tituloPagina = document.getElementById('tituloPagina');
+
+        // ==================== FUNÇÕES DE NAVEGAÇÃO ====================
+        function carregarSecao(secao) {
+            event.preventDefault();
+
+            // Atualizar menu ativo
+            menuItens.forEach(item => item.classList.remove('ativo'));
+            event.target.closest('.menu-item').classList.add('ativo');
+
+            // Atualizar título
+            const titulos = {
+                'dashboard': '📊 Dashboard Principal',
+                'perfil': '👤 Meu Perfil',
+                'projetos': '📁 Projetos',
+                'relatorios': '📈 Relatórios',
+                'configuracoes': '⚙️ Configurações',
+                'ajuda': '❓ Ajuda e Suporte'
+            };
+
+            tituloPagina.textContent = titulos[secao] || 'Dashboard';
+
+            // Mostrar mensagem de carregamento (exemplo)
+            console.log(`Seção carregada: ${secao}`);
+            mostrarNotificacao(`Seção "${secao}" carregada com sucesso!`);
+        }
+
+        // ==================== FUNÇÕES DE LINKS ====================
+        function abrirLink(url) {
+            window.open(url, '_blank');
+            registrarClique(url);
+        }
+
+        function registrarClique(url) {
+            const hostname = new URL(url).hostname;
+            console.log(`Link clicado: ${hostname}`);
+        }
+
+        // ==================== FUNÇÃO DE NOTIFICAÇÃO ====================
+        function mostrarNotificacao(mensagem) {
+            console.log(`📢 ${mensagem}`);
+        }
+
+        // ==================== EFEITOS DE ANIMAÇÃO ====================
+        window.addEventListener('load', function() {
+            // Animar cards ao carregar
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+
+        // ==================== EVENT LISTENERS ====================
+        menuItens.forEach(item => {
+            item.addEventListener('click', function(e) {
+                const secao = this.getAttribute('onclick').match(/'([^']+)'/)[1];
+                console.log(`Menu clicado: ${secao}`);
+            });
+        });
+
+        // ==================== FUNÇÃO DE BUSCA (Exemplo) ====================
+        function buscarProjeto(termo) {
+            console.log(`Buscando: ${termo}`);
+            const tabela = document.querySelector('table tbody tr');
+            // Implementar lógica de busca
+        }
+
+        // ==================== FUNÇÃO DE FORMATAÇÃO ====================
+        function formatarData(data) {
+            const opcoes = { 
+                year: 'numeric', 
+                month: '2-digit', 
+                day: '2-digit' 
+            };
+            return new Date(data).toLocaleDateString('pt-BR', opcoes);
+        }
+
+        // ==================== FUNÇÃO DE VALIDAÇÃO ====================
+        function validarEmail(email) {
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return regex.test(email);
+        }
+
+        // ==================== FUNÇÃO DE SCROLL ====================
+        window.addEventListener('scroll', function() {
+            const topo = document.querySelector('.topo');
+            if (window.scrollY > 0) {
+                topo.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+            } else {
+                topo.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+            }
+        });
+
+        // ==================== TEMA ESCURO (Opcional) ====================
+        function alternarTemaEscuro() {
+            document.body.classList.toggle('tema-escuro');
+            localStorage.setItem('tema', document.body.classList.contains('tema-escuro') ? 'escuro' : 'claro');
+        }
+
+        // ==================== INICIALIZAÇÃO ====================
+        console.log('✅ Dashboard carregado com sucesso!');
+        console.log('🎨 Cores padrão carregadas');
+        console.log('📱 Responsividade ativada');
+    </script>
+</body>
+</html>
